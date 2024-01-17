@@ -1,3 +1,4 @@
+
 <template>
     <a-form :layout="'vertical'" :model="formState">
         <a-row :gutter="16">
@@ -29,18 +30,27 @@
             <a-button type="primary">Submit</a-button>
         </a-form-item>
     </a-form>
-    <a-table :row-selection="rowSelection" :columns="columns" :data-source="tableData" size="middle" :scroll="{ x: 1300, y: 1000 }">
-        <template #bodyCell="{ column }">
+    <a-table :row-selection="rowSelection" :columns="columns" :data-source="tableData" size="middle"
+        :scroll="{ x: 1300, y: 1000 }">
+        <template #bodyCell="{ record, column }">
             <template v-if="column.key === 'operation'">
-                <a>action</a>
+                <a @click="dealThis(record)">处理</a>
+                <a @click="deleteThis(record)" style="color:#f81d22;">删除</a>
             </template>
         </template>
     </a-table>
+    <contextHolder />
 </template>
 <script lang="ts" setup>
-import { computed, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { computed, reactive, h } from 'vue';
 import type { UnwrapRef } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
+import { Modal } from 'ant-design-vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
+const [modal, contextHolder] = Modal.useModal();
+
+const router = useRouter()
 
 interface FormState {
     fieldA: string;
@@ -66,7 +76,7 @@ const columns: TableColumnsType = [
     { title: 'Column 7', dataIndex: 'address', key: '7' },
     { title: 'Column 8', dataIndex: 'address', key: '8' },
     {
-        title: 'Action',
+        title: '操作',
         key: 'operation',
         fixed: 'right',
         width: 100,
@@ -82,17 +92,36 @@ const tableData: DataItem[] = [];
 for (let i = 0; i < 46; i++) {
     tableData.push({ key: i, name: `zh&m ${i}`, age: 32, address: `London, Park Lane no. ${i}` });
 }
-
 const rowSelection: TableProps['rowSelection'] = {
-  onChange: (selectedRowKeys: string[], selectedRows: DataType[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record: DataType) => ({
-    disabled: record.name === 'Disabled User', // Column configuration not to be checked
-    name: record.name,
-  }),
+    onChange: (selectedRowKeys: string[], selectedRows: DataType[]) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
+    getCheckboxProps: (record: DataType) => ({
+        disabled: record.name === 'Disabled User', // Column configuration not to be checked
+        name: record.name,
+    }),
 };
 
+
+const dealThis = (record) => {
+    router.push({ name: 'singleRemit-launch' })
+}
+const deleteThis = (record) => {
+    modal.confirm({
+        title: '确认删除所选项？',
+        icon: h(ExclamationCircleOutlined),
+        content: '',
+        okText: '确认',
+        cancelText: '取消',
+        onOk() {
+            console.log('OK', contextHolder);
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+        class: 'test',
+    });
+}
 </script>
   
   
