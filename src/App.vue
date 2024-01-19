@@ -1,22 +1,24 @@
 <template>
-  <a-layout>
-    <a-layout-header :style="{ position: 'fixed', zIndex: 5, width: '100%', paddingInline: '20px' }">
-      <a-menu mode="horizontal" :items="items" @click="toRouter" />
-    </a-layout-header>
-    <a-layout-content :style="{ padding: '0 0', marginTop: '64px' }">
-      <a-breadcrumb :style="{ margin: '8px 20px' }">
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item>List</a-breadcrumb-item>
-        <a-breadcrumb-item>App</a-breadcrumb-item>
-      </a-breadcrumb>
-      <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }">
-        <RouterView />
-      </div>
-    </a-layout-content>
-    <!-- <a-layout-footer :style="{ textAlign: 'center' }">
-      Ant Design ©2018 Created by Ant UED
-    </a-layout-footer> -->
-  </a-layout>
+  <a-config-provider :locale="locale === 'en' ? enUS : zhCN">
+    <a-layout>
+      <a-layout-header :style="{ position: 'fixed', zIndex: 5, width: '100%', paddingInline: '20px' }">
+        <a-menu mode="horizontal" :items="items" @click="toRouter" />
+      </a-layout-header>
+      <a-layout-content :style="{ padding: '0 0', marginTop: '64px' }">
+        <a-breadcrumb :style="{ margin: '8px 20px' }">
+          <a-breadcrumb-item>Home</a-breadcrumb-item>
+          <a-breadcrumb-item>List</a-breadcrumb-item>
+          <a-breadcrumb-item>App</a-breadcrumb-item>
+        </a-breadcrumb>
+        <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }">
+          <RouterView />
+        </div>
+      </a-layout-content>
+      <!-- <a-layout-footer :style="{ textAlign: 'center' }">
+        Ant Design ©2018 Created by Ant UED
+      </a-layout-footer> -->
+    </a-layout>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
@@ -24,6 +26,14 @@ import { RouterView, useRouter } from 'vue-router'
 import { h, ref,onMounted } from 'vue';
 import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons-vue';
 import type { MenuProps } from 'ant-design-vue';
+import enUS from 'ant-design-vue/es/locale/en_US';
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+
+dayjs.locale('zh'); // 设置antdv日期组件国际化默认为中文
+
+const locale = ref(zhCN.locale); // 设置antdv常用组件国际化默认为中文
 
 const router = useRouter()
 

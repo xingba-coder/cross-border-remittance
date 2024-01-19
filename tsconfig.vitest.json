@@ -1,9 +1,14 @@
 {
   "extends": "./tsconfig.app.json",
+  "include": [
+    "mock/**/*.ts",
+    "src/env.d.ts"
+  ],
   "exclude": [],
   "compilerOptions": {
     "composite": true,
     "lib": [],
-    "types": ["node", "jsdom"]
+    "types": ["vite/client"] // 不配置这个，其他地方引用 import.meta.env 时会报错： ‘env’ does not exist on type ‘ImportMeta’
+    // "types": ["node", "jsdom"]
   }
 }

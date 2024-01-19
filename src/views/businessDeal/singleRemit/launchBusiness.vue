@@ -1,3 +1,4 @@
+
 <template>
     <a-space direction="vertical">
         <a-collapse v-model:activeKey="activeKey" collapsible="header">
@@ -6,14 +7,13 @@
                     <a-row :gutter="24">
                         <a-col :span="6">
                             <a-form-item label="指定交易日期">
-                                <a-date-picker v-model:value="formState.fieldA" placeholder="请选择" style="width:100%;" />
+                                <a-date-picker v-model:value="formState.fieldA" placeholder="请选择" :disabledDate="disabledDate" style="width:100%;" />
                             </a-form-item>
                         </a-col>
                         <a-col :span="6">
                             <a-form-item label="汇款币种">
-                                <a-select v-model:value="formState.fieldB" placeholder="请选择">
-                                    <a-select-option value="shanghai">Zone one</a-select-option>
-                                    <a-select-option value="beijing">Zone two</a-select-option>
+                                <a-select v-model:value="formState.fieldB" placeholder="请选择" allowClear>
+                                    <a-select-option v-for="item in currencyList" :key="item.value" :value="item.value">{{item.label}}</a-select-option>
                                 </a-select>
                             </a-form-item>
                         </a-col>
@@ -43,14 +43,31 @@
 </template>
 
 <script lang="ts" setup>
-import { ref ,reactive} from 'vue';
+import { ref ,reactive,onMounted} from 'vue';
+import dayjs from 'dayjs';
+import { getCurrency } from "@/api/test";
 
 const activeKey = ref(['1', '2']);
 const formState = reactive({
-    fieldA:'',
-    fieldB:'',
+    fieldA:dayjs(new Date()),
+    fieldB:undefined, // placeholder 只有在 value = undefined 才会显示，对于其它的 null、0、'' 等等对于 JS 语言都是有意义的值。
     fieldC:'',
     fieldD:'',
+})
+
+const disabledDate = (current) =>{
+    return current < dayjs().subtract(1, 'day') || current > dayjs().add(30, 'day')
+}
+
+let currencyList = ref([])
+
+onMounted(async () =>{
+    let res = await getCurrency()
+    console.log(res)
+    if(res.code==200){
+        currencyList.value = res.data
+    }
+
 })
 
 </script>
