@@ -14,7 +14,7 @@
             </a-col>
             <a-col :span="6">
                 <a-form-item label="Field A">
-                    <a-input v-model:value="formState.fieldA" placeholder="input placeholder" />
+                    <a-input v-model:value="formState.fieldC" placeholder="input placeholder" />
                 </a-form-item>
             </a-col>
             <a-col :span="6">
@@ -53,13 +53,17 @@ const [modal, contextHolder] = Modal.useModal();
 const router = useRouter()
 
 interface FormState {
-    fieldA: string;
-    fieldB: string;
+    fieldA: Array<[]>;
+    fieldB: Array<[]>;
+    fieldC: string;
+    region: string;
 }
 // Vue 3 中的一个类型工具，用于取消引用(ref)类型的嵌套。
 const formState: UnwrapRef<FormState> = reactive({
     fieldA: [],
     fieldB: [],
+    fieldC: '',
+    region: '',
 });
 const btnWrapperCol = { offset: 0 };
 

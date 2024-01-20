@@ -1,70 +1,48 @@
 
 <template>
     <a-space direction="vertical">
-        <a-collapse v-model:activeKey="activeKey" collapsible="header">
-            <a-collapse-panel key="1" header="This panel can only be collapsed by clicking text">
-                <a-form :layout="'vertical'" :model="formState">
-                    <a-row :gutter="24">
-                        <a-col :span="6">
-                            <a-form-item label="指定交易日期">
-                                <a-date-picker v-model:value="formState.fieldA" placeholder="请选择" :disabledDate="disabledDate" style="width:100%;" />
-                            </a-form-item>
-                        </a-col>
-                        <a-col :span="6">
-                            <a-form-item label="汇款币种">
-                                <a-select v-model:value="formState.fieldB" placeholder="请选择" allowClear>
-                                    <a-select-option v-for="item in currencyList" :key="item.value" :value="item.value">{{item.label}}</a-select-option>
-                                </a-select>
-                            </a-form-item>
-                        </a-col>
-                        <a-col :span="6">
-                            <a-form-item label="是否等值人名币" name="fieldC">
-                                <a-radio-group v-model:value="formState.fieldC">
-                                    <a-radio value="1">是</a-radio>
-                                    <a-radio value="2">否</a-radio>
-                                </a-radio-group>
-                            </a-form-item>
-                        </a-col>
-                        <a-col :span="6">
-                            <a-form-item label="汇款金额">
-                                <a-input v-model:value="formState.fieldD" placeholder="请输入" />
-                            </a-form-item>
-                        </a-col>
-                    </a-row>
-                </a-form>
-            </a-collapse-panel>
-        </a-collapse>
-        <a-collapse v-model:activeKey="activeKey" collapsible="header">
-            <a-collapse-panel key="2" header="This panel can only be collapsed by clicking icon">
-
-            </a-collapse-panel>
-        </a-collapse>
+        <form1 
+            :currencyList = "currencyList"
+            @updateForm="updateForm"
+            @updateComp="updateComp"
+        />
+        <form2 
+            ref="form2_element"
+        />
+        <form3 />
     </a-space>
 </template>
 
 <script lang="ts" setup>
 import { ref ,reactive,onMounted} from 'vue';
-import dayjs from 'dayjs';
+import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的组件都在模板中直接可用。
+import form2 from './formComp/form2.vue'
+import form3 from './formComp/form3.vue'
 import { getCurrency } from "@/api/test";
 
-const activeKey = ref(['1', '2']);
-const formState = reactive({
-    fieldA:dayjs(new Date()),
-    fieldB:undefined, // placeholder 只有在 value = undefined 才会显示，对于其它的 null、0、'' 等等对于 JS 语言都是有意义的值。
-    fieldC:'',
-    fieldD:'',
-})
+interface comeinObj{
+    compName:String,
+    key:String,
+    value:String | undefined,
+}
 
-const disabledDate = (current) =>{
-    return current < dayjs().subtract(1, 'day') || current > dayjs().add(30, 'day')
+const form2_element = ref()
+
+const updateForm = (obj:comeinObj) =>{
+    console.log(form2_element.value.formState)
+    // 这里是直接通过父组件去改变子组件的值，默认父组件无法访问到使用了 <script setup> 的子组件中的任何东西，所以子组件需要使用 defineExpose 暴露出可以被访问哪些东西
+    form2_element.value.formState[obj.key] = obj.value
+}
+const updateComp = (obj:comeinObj) =>{
+    form2_element.value[obj.key] = obj.value
 }
 
 let currencyList = ref([])
 
-onMounted(async () =>{
+onMounted(async () => {
     let res = await getCurrency()
     console.log(res)
-    if(res.code==200){
+    if (res.code == 200) {
         currencyList.value = res.data
     }
 
