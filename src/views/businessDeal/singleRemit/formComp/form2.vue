@@ -9,7 +9,7 @@
                             <a-input v-model:value="formState.fieldD" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
-                    {{title}}
+                    <span @click="clickTitle">{{title}}</span>
                 </a-row>
             </a-form>
         </a-collapse-panel>
@@ -17,15 +17,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted,inject } from 'vue';
 import dayjs from 'dayjs';
 import { getCurrency } from "@/api/test";
+const { form1_element, form2_element,form3_element } = inject('childComp')
 
 const activeKey = ref(['1']);
 const formState = reactive({
     fieldD: '',
 })
 let title = ref('')
+
+const clickTitle = () =>{
+    console.log(form1_element.value.formState.fieldB)
+}
 
 defineExpose({
     formState,

@@ -51,26 +51,26 @@ const items = ref<MenuProps['items']>([
     children: [
       {
         key: 'singleRemit',
-        label: 'singleRemit',
-        title: 'singleRemit',
+        label: '单笔汇款',
+        // title: 'singleRemit',
         children: [
           {
             key: 'singleRemit-savedList',
-            label: 'savedList',
+            label: '保存业务处理',
             // title: 'Option 5',
           },
           {
             key: 'singleRemit-launch',
-            label: 'launch',
+            label: '单笔汇款委托',
             // title: 'Option 6',
           },
           {
             key: 'singleRemit-tobeModified',
-            label: 'tobeModified',
+            label: '待修改',
           },
           {
             key: 'singleRemit-tobeReviewed',
-            label: 'tobeReviewed',
+            label: '待复核/待授权',
           }
         ],
       },

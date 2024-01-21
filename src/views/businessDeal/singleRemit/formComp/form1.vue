@@ -47,6 +47,7 @@ import dayjs from 'dayjs';
 const props = defineProps({
     currencyList:{type:Array,required:true,default:() =>[] },  // 每次父组件更新后，所有的子组件中的 props 都会被更新到最新值
 })
+
 const changeRemitCur = () =>{
     console.log(formState.fieldB)
     if(formState.fieldB==='USD'){
@@ -76,6 +77,9 @@ const disabledDate = (current) => {
     return current < dayjs().subtract(1, 'day') || current > dayjs().add(30, 'day')
 }
 
+defineExpose({
+    formState
+})
 </script>
 
 <style scoped>

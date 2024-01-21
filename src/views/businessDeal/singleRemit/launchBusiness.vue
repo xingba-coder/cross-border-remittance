@@ -1,7 +1,8 @@
 
 <template>
     <a-space direction="vertical">
-        <form1 
+        <form1
+            ref="form1_element"
             :currencyList = "currencyList"
             @updateForm="updateForm"
             @updateComp="updateComp"
@@ -9,12 +10,14 @@
         <form2 
             ref="form2_element"
         />
-        <form3 />
+        <form3 
+            ref="form3_element"
+        />
     </a-space>
 </template>
 
 <script lang="ts" setup>
-import { ref ,reactive,onMounted} from 'vue';
+import { ref ,reactive,onMounted,provide} from 'vue';
 import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的组件都在模板中直接可用。
 import form2 from './formComp/form2.vue'
 import form3 from './formComp/form3.vue'
@@ -26,7 +29,9 @@ interface comeinObj{
     value:String | undefined,
 }
 
+const form1_element = ref()
 const form2_element = ref()
+const form3_element = ref()
 
 const updateForm = (obj:comeinObj) =>{
     console.log(form2_element.value.formState)
@@ -34,7 +39,7 @@ const updateForm = (obj:comeinObj) =>{
     form2_element.value.formState[obj.key] = obj.value
 }
 const updateComp = (obj:comeinObj) =>{
-    form2_element.value[obj.key] = obj.value
+    form2_element.value[obj.key] = obj.value  // 当父组件通过模板引用获取到了该组件的实例时，里面的ref 会自动解包
 }
 
 let currencyList = ref([])
@@ -47,6 +52,8 @@ onMounted(async () => {
     }
 
 })
+
+provide("childComp", { form1_element, form2_element,form3_element });
 
 </script>
 
