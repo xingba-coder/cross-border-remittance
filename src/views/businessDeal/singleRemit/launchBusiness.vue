@@ -14,6 +14,18 @@
             ref="form3_element"
         />
     </a-space>
+    <div class="footer">
+        <a-row>
+            <a-col :span="4">
+                <a-button>返回</a-button>
+            </a-col>
+            <a-col :span="8" :offset="12" class="actionBtn">
+                <a-button style="background-color: #ff9c00;border-color: #ff9c00;color: #fff;">Button</a-button>
+                <a-button type="primary" @click="submitThis">Button</a-button>
+                <a-button danger >Button</a-button>
+            </a-col>
+        </a-row>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -44,13 +56,17 @@ const updateComp = (obj:comeinObj) =>{
 
 let currencyList = ref([])
 
+const submitThis = () =>{
+    form1_element.value.form.validate()
+}
+
 onMounted(async () => {
     let res = await getCurrency()
     console.log(res)
     if (res.code == 200) {
         currencyList.value = res.data
     }
-
+    
 })
 
 provide("childComp", { form1_element, form2_element,form3_element });
@@ -60,6 +76,21 @@ provide("childComp", { form1_element, form2_element,form3_element });
 <style scoped>
 .ant-space {
     width: 100%;
+}
+.footer{
+    width:100%;
+    position:sticky;
+    bottom:0;
+    padding:16px 0;
+    box-shadow: 0 -1px 7px 0 #e0e0e0;
+    .actionBtn{
+        text-align: right;
+        .ant-btn{
+            & + .ant-btn{
+                margin-left:8px;
+            }
+        }
+    }
 }
 </style>
   

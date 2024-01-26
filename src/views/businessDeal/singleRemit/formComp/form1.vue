@@ -2,16 +2,16 @@
 <template>
     <a-collapse v-model:activeKey="activeKey" collapsible="header">
         <a-collapse-panel key="1" header="汇款信息">
-            <a-form :layout="'vertical'" :model="formState">
+            <a-form :layout="'vertical'" :model="formState" ref="form" :rules="rules" :scrollToFirstError="true">
                 <a-row :gutter="24">
                     <a-col :span="6">
-                        <a-form-item label="指定交易日期">
+                        <a-form-item label="指定交易日期" name="fieldA">
                             <a-date-picker v-model:value="formState.fieldA" placeholder="请选择" :disabledDate="disabledDate"
                                 style="width:100%;" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item label="汇款币种">
+                        <a-form-item label="汇款币种" name="fieldB">
                             <a-select v-model:value="formState.fieldB" placeholder="请选择" allowClear @change="changeRemitCur">
                                 <a-select-option v-for="item in currencyList" :key="item.value"
                                     :value="item.value">{{ item.label }}</a-select-option>
@@ -27,8 +27,47 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item label="汇款金额">
-                            <a-input v-model:value="formState.fieldD" placeholder="请输入" />
+                        <a-form-item label="汇款金额" name="remitAmt">
+                            <a-input ref="remitAmtRef" v-model:value="formState.remitAmt" placeholder="请输入" @change="changeRemitAmt" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-item label="现汇账户" name="xhAccount">
+                            <a-select v-model:value="formState.xhAccount" placeholder="请选择" allowClear @change="changeRemitCur">
+                                <a-select-option v-for="item in currencyList" :key="item.value"
+                                    :value="item.value">{{ item.label }}</a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-form-item label="现汇金额" name="xhAmt">
+                            <a-input v-model:value="formState.xhAmt" placeholder="请输入" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-item label="购汇账户" name="ghAccount">
+                            <a-select v-model:value="formState.ghAccount" placeholder="请选择" allowClear @change="changeRemitCur">
+                                <a-select-option v-for="item in currencyList" :key="item.value"
+                                    :value="item.value">{{ item.label }}</a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-form-item label="购汇金额" name="ghAmt">
+                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                        <a-form-item label="其他账户" name="otherAccount">
+                            <a-select v-model:value="formState.otherAccount" placeholder="请选择" allowClear @change="changeRemitCur">
+                                <a-select-option v-for="item in currencyList" :key="item.value"
+                                    :value="item.value">{{ item.label }}</a-select-option>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-form-item label="其他金额" name="otherAmt">
+                            <a-input v-model:value="formState.otherAmt" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
                 </a-row>
@@ -39,7 +78,10 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted, watchEffect } from 'vue';
+import { useDebounceFn } from '@vueuse/core'
 import dayjs from 'dayjs';
+import type { Rule } from 'ant-design-vue/es/form';
+import { validateAmt } from "./util";
 
 // defineProps 是一个仅 <script setup> 中可用的编译宏命令，并不需要显式地导入。
 // 声明的 props 会自动暴露给模板。
@@ -51,7 +93,7 @@ const props = defineProps({
 const changeRemitCur = () =>{
     console.log(formState.fieldB)
     if(formState.fieldB==='USD'){
-        emit('updateForm',{compName:'form2',key:'fieldD',value:formState.fieldB})
+        emit('updateForm',{compName:'form2',key:'remitAmt',value:formState.fieldB})
     }else{
         emit('updateComp',{compName:'form2',key:'title',value:formState.fieldB})
     }
@@ -64,21 +106,43 @@ const emit = defineEmits(['updateForm','updateComp'])
 //     selfCurList.value = props.currencyList
 // })
 
-
 const activeKey = ref(['1']);
+const form = ref()
 const formState = reactive({
     fieldA: dayjs(new Date()),
     fieldB: undefined, // placeholder 只有在 value = undefined 才会显示，对于其它的 null、0、'' 等等对于 JS 语言都是有意义的值。
     fieldC: '',
-    fieldD: '',
+    remitAmt: '',
+    xhAccount:undefined,
+    xhAmt:'',
+    ghAccount:undefined,
+    ghAmt:'',
+    otherAccount:undefined,
+    otherAmt:'',
 })
 
 const disabledDate = (current) => {
     return current < dayjs().subtract(1, 'day') || current > dayjs().add(30, 'day')
 }
 
+const rules: Record<string, Rule[]> = {
+  fieldA: [{ required: true, trigger: 'change' }],
+  fieldB: [{ required: true, trigger: 'change' }],
+  fieldC: [{ required: true, trigger: 'change' }],
+  remitAmt: [{ required: true,validator:validateAmt, trigger: 'change' }],
+  xhAmt: [{validator:validateAmt, trigger: 'change' }],
+  ghAmt: [{validator:validateAmt, trigger: 'change' }],
+  otherAmt: [{validator:validateAmt, trigger: 'change' }],
+};
+
+const remitAmtRef = ref()
+const changeRemitAmt = useDebounceFn(() => {
+  form.value.resetFields(['xhAccount','xhAmt','ghAccount','ghAmt','otherAccount','otherAmt'])
+}, 500)
+
 defineExpose({
-    formState
+    formState,
+    form
 })
 </script>
 

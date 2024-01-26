@@ -1,6 +1,6 @@
 
 <template>
-    <a-collapse v-model:activeKey="activeKey" collapsible="header">
+    <a-collapse v-model:activeKey="activeKey" collapsible="header" style="padding-bottom: 2000px;">
         <a-collapse-panel key="1" header="其他信息">
             <a-form :layout="'vertical'" :model="formState">
                 <a-row :gutter="24">
