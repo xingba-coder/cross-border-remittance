@@ -9,4 +9,19 @@ export const validateAmt = async (_rule: Rule, value: string) => {
         }
     }
     return Promise.resolve();
-};
+}
+
+export const numToThousands = (num:number|string) =>{
+    if(~~num){
+        return
+    }
+    if(typeof num ==='object') {
+        return num
+    }
+    const arr = Number(num).toFixed(2).split('.')
+    return Number(arr[0]).toLocaleString() + '.' + (arr[1]?arr[1]:'00')
+}
+
+export const thousandsToNum = (thousands:any) =>{
+    return Number(thousands.replace(/,/g,''))
+}

@@ -34,6 +34,7 @@ import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的�
 import form2 from './formComp/form2.vue'
 import form3 from './formComp/form3.vue'
 import { getCurrency } from "@/api/test";
+import type { SelectProps } from 'ant-design-vue';
 
 interface comeinObj{
     compName:String,
@@ -54,7 +55,7 @@ const updateComp = (obj:comeinObj) =>{
     form2_element.value[obj.key] = obj.value  // 当父组件通过模板引用获取到了该组件的实例时，里面的ref 会自动解包
 }
 
-let currencyList = ref([])
+let currencyList = ref<SelectProps['options']>([])
 
 const submitThis = () =>{
     form1_element.value.form.validate()
