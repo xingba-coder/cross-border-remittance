@@ -1,7 +1,14 @@
 <template>
     <a-collapse v-model:activeKey="activeKey" collapsible="header">
         <a-collapse-panel key="1" header="汇款信息">
-            <a-form :layout="'vertical'" :model="formState" ref="form" :rules="rules" :scrollToFirstError="true">
+            <a-form
+                :layout="'vertical'" 
+                :model="formState" 
+                ref="form" 
+                :rules="rules" 
+                :scrollToFirstError="true" 
+                @validate="anyoneValidate"
+            >
                 <a-row :gutter="24">
                     <a-col :span="6">
                         <a-form-item label="指定交易日期" name="spedTranDate">
@@ -33,14 +40,13 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item label="汇款金额" name="remitAmt">
+                        <a-form-item label="汇款金额" name="remitAmt" ref="remitAmtRef">
                             <a-input
-                                ref="remitAmtRef" 
                                 v-model:value="formState.remitAmt" 
                                 placeholder="请输入"
                                 @change="changeRemitAmt"
-                                @blur="addThousandsFormat"
-                                @focus="removeThousandsFormat"
+                                @blur="addThousandsFormat('remitAmt')"
+                                @focus="removeThousandsFormat('remitAmt')"
                             />
                         </a-form-item>
                     </a-col>
@@ -95,42 +101,47 @@
                     <a-divider style="border-color: #e8e8e8;" dashed />
                     <a-col :span="6">
                         <a-form-item label="组织机构代码" name="orgCode">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.orgCode" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                         <a-form-item label="汇款人名称" name="remitName">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitName" placeholder="请输入" show-count
+                                :maxlength="20" @blur="blurToUpperCase('remitName')" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="12">
                         <a-form-item label="汇款人详细地址" name="remitAddr">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitAddr" placeholder="请输入" show-count
+                                :maxlength="20" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                         <a-form-item label="汇款人城市" name="remitCity">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitCity" placeholder="请输入" show-count
+                                :maxlength="20" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                         <a-form-item label="汇款人省份" name="remitProvince">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitProvince" placeholder="请输入" show-count
+                                :maxlength="20" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                         <a-form-item label="汇款人国家（地区）" name="remitCountry">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitCountry" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
                         <a-form-item label="汇款人邮编" name="remitPostcode">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitPostcode" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6" style="margin-right: 75%;">
                         <a-form-item label="客户业务编号" name="businessCode">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.businessCode" placeholder="请输入" show-count
+                                :maxlength="20" />
                         </a-form-item>
                     </a-col>
                     <a-divider style="border-color: #e8e8e8;" dashed />
@@ -147,7 +158,7 @@
                     </a-col>
                     <a-col :span="12">
                         <a-form-item label="汇款附言" name="remitMemo">
-                            <a-input v-model:value="formState.ghAmt" placeholder="请输入" />
+                            <a-input v-model:value="formState.remitMemo" placeholder="请输入" />
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
@@ -191,7 +202,7 @@ const emit = defineEmits(['updateForm', 'updateComp'])
 
 const activeKey = ref(['1']);
 const form = ref()
-const formState = reactive({
+const formState:{[key:string]:any} = reactive({
     spedTranDate: dayjs(new Date()),
     remitCur:'USD', // placeholder 只有在 value = undefined 才会显示，对于其它的 null、0、'' 等等对于 JS 语言都是有意义的值。
     isEuipRmb: '',
@@ -241,11 +252,25 @@ const remitAmtRef = ref()
 const changeRemitAmt = useDebounceFn(() => {
     form.value.resetFields(['xhAccount', 'xhAmt', 'ghAccount', 'ghAmt', 'otherAccount', 'otherAmt'])
 }, 500)
-const addThousandsFormat = () =>{
-    formState.remitAmt = numToThousands(formState.remitAmt)
+const addThousandsFormat = (field:string) =>{
+    formState[field] = numToThousands(formState[field])
 }
-const removeThousandsFormat = () =>{
-    
+const removeThousandsFormat = (field:string) =>{
+    // 栏位校验通过，再进行转换
+    // 获取当前表单项的校验状态，奈何 4.x 没暴露直接获取状态的接口
+    if(validateInfoMap.get(field)===true){
+        formState[field] = thousandsToNum(formState[field])
+    }
+}
+const blurToUpperCase = (field:string) =>{
+    console.log(validateInfoMap.entries())
+    if(!validateInfoMap.has(field) || validateInfoMap.get(field)===true){
+        formState[field] = String(formState[field]).toUpperCase()
+    }
+}
+const validateInfoMap = new Map()
+const anyoneValidate = (name, status, errorMsgs) =>{
+    validateInfoMap.set(name,status)
 }
 
 const currencyOptions = ref()
@@ -267,6 +292,12 @@ defineExpose({
 <style scoped>
 .ant-space {
     width: 100%;
+}
+.ant-form-item{
+    margin-bottom: 12px;
+}
+.ant-form-item :deep(.ant-form-item-label){
+    padding-bottom:4px;
 }
 </style>
   

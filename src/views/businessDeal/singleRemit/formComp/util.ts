@@ -11,11 +11,11 @@ export const validateAmt = async (_rule: Rule, value: string) => {
     return Promise.resolve();
 }
 
-export const numToThousands = (num:number|string) =>{
-    if(~~num){
-        return
+export const numToThousands = (num:string):string =>{
+    if(!~~num){
+        return num
     }
-    if(typeof num ==='object') {
+    if(typeof num ==='object') {  // 防止数组只有一个数字元素的情况， [3] 转为数字是 3
         return num
     }
     const arr = Number(num).toFixed(2).split('.')
