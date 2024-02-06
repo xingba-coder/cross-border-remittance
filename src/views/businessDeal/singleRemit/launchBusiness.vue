@@ -1,16 +1,18 @@
 
 <template>
-    <a-space direction="vertical">
+    <a-space direction="vertical" style="margin-bottom: 8px;">
         <form1
             ref="form1_element"
             :currencyList = "currencyList"
+            :custActList = "custActList"
             @updateForm="updateForm"
             @updateComp="updateComp"
         />
         <form2 
             ref="form2_element"
         />
-        <form3 
+        <form3
+            :custActList = "custActList"
             ref="form3_element"
         />
     </a-space>
@@ -20,9 +22,9 @@
                 <a-button>返回</a-button>
             </a-col>
             <a-col :span="8" :offset="12" class="actionBtn">
-                <a-button style="background-color: #ff9c00;border-color: #ff9c00;color: #fff;">Button</a-button>
-                <a-button type="primary" @click="submitThis">Button</a-button>
-                <a-button danger >Button</a-button>
+                <a-button style="background-color: #ff9c00;border-color: #ff9c00;color: #fff;">保存</a-button>
+                <a-button type="primary" @click="submitThis">提交</a-button>
+                <a-button>重置</a-button>
             </a-col>
         </a-row>
     </div>
@@ -33,7 +35,7 @@ import { ref ,reactive,onMounted,provide} from 'vue';
 import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的组件都在模板中直接可用。
 import form2 from './formComp/form2.vue'
 import form3 from './formComp/form3.vue'
-import { getCurrency } from "@/api/test";
+import { getCurrency,getCustActInfo } from "@/api/test";
 import type { SelectProps } from 'ant-design-vue';
 
 interface comeinObj{
@@ -55,34 +57,45 @@ const updateComp = (obj:comeinObj) =>{
     form2_element.value[obj.key] = obj.value  // 当父组件通过模板引用获取到了该组件的实例时，里面的ref 会自动解包
 }
 
-let currencyList = ref<SelectProps['options']>([])
-
 const submitThis = () =>{
     form1_element.value.form.validate()
 }
 
-onMounted(async () => {
+let currencyList = ref<SelectProps['options']>([])
+const getCurrencyFn = async() =>{
     let res = await getCurrency()
-    console.log(res)
     if (res.code == 200) {
         currencyList.value = res.data
     }
-    
+}
+
+let custActList = ref<SelectProps['options']>([])
+const getCustActInfoFn = async() =>{
+    let res = await getCustActInfo()
+    if (res.code == 200) {
+        custActList.value = res.data
+    }
+}
+
+onMounted(async () => {
+    getCurrencyFn()
+    getCustActInfoFn()    
 })
 
 provide("childComp", { form1_element, form2_element,form3_element });
 
 </script>
 
-<style scoped>
+<style lang="less">
 .ant-space {
     width: 100%;
 }
 .footer{
     width:100%;
+    background-color: #fff;
     position:sticky;
     bottom:0;
-    padding:16px 0;
+    padding:16px 24px;
     box-shadow: 0 -1px 7px 0 #e0e0e0;
     .actionBtn{
         text-align: right;
@@ -92,6 +105,34 @@ provide("childComp", { form1_element, form2_element,form3_element });
             }
         }
     }
+}
+
+.container{
+    background: #fff;
+    padding:12px 24px;
+    .header{
+        padding-bottom: 12px;
+        .title{
+            display: inline-block;
+            padding-left: 10px;
+            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            border-left: 4px solid #d32f2f;
+        }
+        a{
+            margin-left: 4px;
+            &:hover{
+                background-color: #fff;
+            }
+        }
+    }
+}
+.ant-form-item{
+    margin-bottom: 12px;
+}
+.ant-form-item .ant-form-item-label{
+    padding-bottom:4px;
 }
 </style>
   

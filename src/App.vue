@@ -10,7 +10,7 @@
           <a-breadcrumb-item>List</a-breadcrumb-item>
           <a-breadcrumb-item>App</a-breadcrumb-item>
         </a-breadcrumb>
-        <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }">
+        <div :style="{}">
           <RouterView />
         </div>
       </a-layout-content>

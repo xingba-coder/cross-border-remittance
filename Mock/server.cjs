@@ -27,3 +27,7 @@ app.listen(3000, () => {
 app.get('/api/getCurrency', (req, res) => {  
     res.send(defineResponse(DATA['/api/getCurrency']));  
 });
+
+app.get('/api/getCustActInfo', (req, res) => {  
+    res.send(defineResponse(DATA['/api/getCustActInfo']));  
+});

@@ -6,3 +6,10 @@ export function getCurrency(){
         method:'get'
     })
 }
+
+export function getCustActInfo(){
+    return request({
+        url:'/getCustActInfo',
+        method:'get'
+    })
+}
