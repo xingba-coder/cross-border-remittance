@@ -10,9 +10,11 @@
         />
         <form2 
             ref="form2_element"
+            :countryList="countryList"
         />
         <form3
             :custActList = "custActList"
+            :tradeCodeList = "tradeCodeList"
             ref="form3_element"
         />
     </a-space>
@@ -35,7 +37,7 @@ import { ref ,reactive,onMounted,provide} from 'vue';
 import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的组件都在模板中直接可用。
 import form2 from './formComp/form2.vue'
 import form3 from './formComp/form3.vue'
-import { getCurrency,getCustActInfo } from "@/api/test";
+import { getCurrency,getCustActInfo,getCountryList,getTradeCode } from "@/api/test";
 import type { SelectProps } from 'ant-design-vue';
 
 interface comeinObj{
@@ -59,6 +61,8 @@ const updateComp = (obj:comeinObj) =>{
 
 const submitThis = () =>{
     form1_element.value.form.validate()
+    form2_element.value.form.validate()
+    form3_element.value.form.validate()
 }
 
 let currencyList = ref<SelectProps['options']>([])
@@ -77,9 +81,27 @@ const getCustActInfoFn = async() =>{
     }
 }
 
-onMounted(async () => {
+let countryList = ref([])
+const getCountryListFn = async() =>{
+    let res = await getCountryList()
+    if (res.code == 200) {
+        countryList.value = res.data
+    }
+}
+
+let tradeCodeList = ref([])
+const getTradeCodeFn = async() =>{
+    let res = await getTradeCode()
+    if (res.code == 200) {
+        tradeCodeList.value = res.data
+    }
+}
+
+onMounted(() => {
     getCurrencyFn()
     getCustActInfoFn()    
+    getCountryListFn()    
+    getTradeCodeFn()    
 })
 
 provide("childComp", { form1_element, form2_element,form3_element });

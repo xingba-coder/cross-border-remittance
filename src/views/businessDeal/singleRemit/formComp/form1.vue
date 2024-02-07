@@ -223,6 +223,7 @@ import type { Rule } from 'ant-design-vue/es/form';
 import type { SelectProps } from 'ant-design-vue';
 import { SaveOutlined, SettingOutlined,InfoCircleOutlined,DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import { validateAmt,numToThousands,thousandsToNum } from "./util";
+import {useRemitStore} from '@/stores/singleRemit'
 
 // defineProps 是一个仅 <script setup> 中可用的编译宏命令，并不需要显式地导入。
 // 声明的 props 会自动暴露给模板。
@@ -269,13 +270,12 @@ const rules: Record<string, Rule[]> = {
     otherAmt: [{ validator: validateAmt, trigger: 'change' }],
 };
 
+const remitStore = useRemitStore()
 const changeRemitCur = () => {
     console.log(formState.remitCur)
-    if (formState.remitCur === 'USD') {
-        emit('updateForm', { compName: 'form2', key: 'remitAmt', value: formState.remitCur })
-    } else {
-        emit('updateComp', { compName: 'form2', key: 'title', value: formState.remitCur })
-    }
+    emit('updateForm', { compName: 'form2', key: 'payeeAccount', value: formState.remitCur })
+    // emit('updateComp', { compName: 'form2', key: 'payeeAccount', value: formState.remitCur })
+    remitStore.changeRemitCur(formState.remitCur)
 }
 
 const disabledDate = (current:Dayjs) => {
@@ -315,15 +315,13 @@ const blurToUpperCase = (field:string) =>{
     }
 }
 
-const currencyOptions = ref()
-watchEffect(() =>{
-    currencyOptions.value = props.currencyList.map((item:any) =>{
+const currencyOptions = computed(() =>{
+    return props.currencyList.map((item:any) =>{
         return {label:item.value+ '-' +item.label,value:item.value}
     })
 })
-const custActOptions = ref()
-watchEffect(() =>{
-    custActOptions.value = props.custActList.map((item:any) =>{
+const custActOptions = computed(() =>{
+    return props.custActList.map((item:any) =>{
         // select 框是用 options 模式，必须指定 label 和 value
         item.label = item.actName + ' | ' + item.curCode + ' | ' + item.actNo + ' | ' + item.orgName
         item.value = item.actNo

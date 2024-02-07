@@ -31,3 +31,11 @@ app.get('/api/getCurrency', (req, res) => {
 app.get('/api/getCustActInfo', (req, res) => {  
     res.send(defineResponse(DATA['/api/getCustActInfo']));  
 });
+
+app.get('/api/getCountryList', (req, res) => {  
+    res.send(defineResponse(DATA['/api/getCountryList']));  
+});
+
+app.get('/api/getTradeCode', (req, res) => {  
+    res.send(defineResponse(DATA['/api/getTradeCode']));  
+});
