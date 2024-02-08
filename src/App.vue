@@ -52,7 +52,6 @@ const items = ref<MenuProps['items']>([
       {
         key: 'singleRemit',
         label: '单笔汇款',
-        // title: 'singleRemit',
         children: [
           {
             key: 'singleRemit-savedList',
@@ -75,9 +74,53 @@ const items = ref<MenuProps['items']>([
         ],
       },
       {
-        key: '3',
-        label: 'Option 3',
-        title: 'Option 3',
+        key: 'batchRemit',
+        label: '批量汇款',
+      },
+    ],
+  },
+  {
+    key: 'businessCheck',
+    icon: () => h(SettingOutlined),
+    label: '业务复核',
+    children: [
+      {
+        key: 'singleCheck',
+        label: '单笔复核',
+      },
+      {
+        key: 'batchCheck',
+        label: '批量复核',
+      },
+    ],
+  },
+  {
+    key: 'businessAuth',
+    icon: () => h(SettingOutlined),
+    label: '业务授权',
+    children: [
+      {
+        key: 'singleAuth',
+        label: '单笔授权',
+      },
+      {
+        key: 'batchAuth',
+        label: '批量授权',
+      },
+    ],
+  },
+  {
+    key: 'businessSearch',
+    icon: () => h(SettingOutlined),
+    label: '综合查询及服务',
+    children: [
+      {
+        key: 'allSearch',
+        label: '综合查询',
+      },
+      {
+        key: 'downloads',
+        label: '下载管理',
       },
     ],
   },

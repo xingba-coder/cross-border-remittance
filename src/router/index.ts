@@ -42,6 +42,11 @@ const router = createRouter({
           component: () => import('@/views/businessDeal/singleRemit/tobeReviewed.vue')
         },
       ]
+    },
+    {
+      name:'allSearch',
+      path:'/allSearch',
+      component: () => import('../views/businessSearch/seach/index.vue')
     }
   ]
 })
