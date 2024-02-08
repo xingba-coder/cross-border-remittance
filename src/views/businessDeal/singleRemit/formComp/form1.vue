@@ -189,26 +189,8 @@
                         ></a-select>
                     </a-form-item>
                 </a-col>
-                <a-col :span="12">
-                    <a-form-item label="汇款附言" name="remitMemo">
-                        <a-input v-model:value="formState.remitMemo" placeholder="请输入" />
-                    </a-form-item>
-                </a-col>
-                <a-col :span="6">
-                    <div style="margin-top: 30px;">
-                        <a-button type="text">
-                            <template #icon>
-                                <SaveOutlined />
-                            </template>
-                            保存为常用附言
-                        </a-button>
-                        <a-button type="text">
-                            <template #icon>
-                                <SettingOutlined />
-                            </template>
-                            附言设置
-                        </a-button>
-                    </div>
+                <a-col :span="18">
+                    <remitMemo />
                 </a-col>
             </a-row>
         </a-form>
@@ -221,9 +203,10 @@ import { useDebounceFn } from '@vueuse/core'
 import dayjs,{Dayjs} from 'dayjs';
 import type { Rule } from 'ant-design-vue/es/form';
 import type { SelectProps } from 'ant-design-vue';
-import { SaveOutlined, SettingOutlined,InfoCircleOutlined,DownOutlined, UpOutlined } from '@ant-design/icons-vue';
+import { InfoCircleOutlined,DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import { validateAmt,numToThousands,thousandsToNum } from "./util";
 import {useRemitStore} from '@/stores/singleRemit'
+import remitMemo from './remitMemo.vue';
 
 // defineProps 是一个仅 <script setup> 中可用的编译宏命令，并不需要显式地导入。
 // 声明的 props 会自动暴露给模板。
