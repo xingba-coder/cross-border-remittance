@@ -1,14 +1,14 @@
 <template>
   <a-config-provider :locale="locale === 'en' ? enUS : zhCN">
     <a-layout>
-      <a-layout-header :style="{ position: 'fixed', zIndex: 5, width: '100%', paddingInline: '20px' }">
-        <a-menu mode="horizontal" :items="items" @click="toRouter" />
+      <a-layout-header :style="{ position: 'fixed', zIndex: 5, width: '100%', paddingInline: '0' }">
+        <a-menu mode="horizontal" :items="items" theme="dark" @click="toRouter" />
       </a-layout-header>
       <a-layout-content :style="{ padding: '0 0', marginTop: '64px' }">
         <a-breadcrumb :style="{ margin: '8px 20px' }">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
+          <a-breadcrumb-item>一级页面</a-breadcrumb-item>
+          <a-breadcrumb-item>二级页面</a-breadcrumb-item>
+          <a-breadcrumb-item>三级页面</a-breadcrumb-item>
         </a-breadcrumb>
         <div :style="{}">
           <RouterView />
@@ -115,7 +115,7 @@ const items = ref<MenuProps['items']>([
     label: '综合查询及服务',
     children: [
       {
-        key: 'allSearch',
+        key: 'allSearch-index',
         label: '综合查询',
       },
       {

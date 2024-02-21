@@ -112,49 +112,4 @@ provide("childComp", { form1_element, form2_element,form3_element });
 .ant-space {
     width: 100%;
 }
-.footer{
-    width:100%;
-    background-color: #fff;
-    position:sticky;
-    bottom:0;
-    padding:16px 24px;
-    box-shadow: 0 -1px 7px 0 #e0e0e0;
-    .actionBtn{
-        text-align: right;
-        .ant-btn{
-            & + .ant-btn{
-                margin-left:8px;
-            }
-        }
-    }
-}
-
-.container{
-    background: #fff;
-    padding:12px 24px;
-    .header{
-        padding-bottom: 12px;
-        .title{
-            display: inline-block;
-            padding-left: 10px;
-            margin-bottom: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            border-left: 4px solid #d32f2f;
-        }
-        a{
-            margin-left: 4px;
-            &:hover{
-                background-color: #fff;
-            }
-        }
-    }
-}
-.ant-form-item{
-    margin-bottom: 12px;
-}
-.ant-form-item .ant-form-item-label{
-    padding-bottom:4px;
-}
 </style>
-  

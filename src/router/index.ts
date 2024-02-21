@@ -46,7 +46,18 @@ const router = createRouter({
     {
       name:'allSearch',
       path:'/allSearch',
-      component: () => import('../views/businessSearch/seach/index.vue')
+      children:[
+        {
+          path:'/allSearch/index',
+          name:'allSearch-index',
+          component: () => import('@/views/businessSearch/search/index.vue')
+        },
+        {
+          path:'/allSearch/detail',
+          name:'allSearch-detail',
+          component: () => import('@/views/businessSearch/search/detail.vue')
+        },
+      ]
     }
   ]
 })
