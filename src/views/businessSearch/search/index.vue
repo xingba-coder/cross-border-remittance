@@ -1,7 +1,7 @@
 
 <template>
     <div class="container">
-        <a-space direction="vertical">
+        <!-- <a-space direction="vertical"> -->
             <a-form :layout="'vertical'" :model="formState">
                 <a-row :gutter="48">
                     <a-col :span="6">
@@ -141,7 +141,7 @@
                     </a-col>
                 </a-row>
             </a-form>
-            <a-table :columns="columns" :data-source="tableData" size="middle" :scroll="{ x: 1300, y: 1000 }">
+            <a-table :columns="columns" :data-source="tableData" size="middle" :scroll="{ x: 1300, y: 1000 }" style="margin-top: 8px;">
                 <template #headerCell="{ column }">
                     <template v-if="column.key === '1'">
                         <div>客户申请号</div>
@@ -182,18 +182,15 @@
                     </template>
                 </template>
             </a-table>
-        </a-space>
-        <contextHolder />
+        <!-- </a-space> -->
     </div>
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { computed, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import type { UnwrapRef } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
-import { Modal } from 'ant-design-vue';
 import { UpOutlined,DownOutlined } from '@ant-design/icons-vue';
-const [modal, contextHolder] = Modal.useModal();
 
 const expand = ref(false)
 
@@ -214,13 +211,17 @@ const formState: UnwrapRef<FormState> = reactive({
 });
 
 const columns: TableColumnsType = [
-    { title: '', dataIndex: 'address', key: '1' },
+    { title: '', dataIndex: 'address', key: '1'},
     { title: '初次委托日期', dataIndex: 'address', key: '2' },
     { title: 'Column 3', dataIndex: 'address', key: '3' },
     { title: 'Column 4', dataIndex: 'address', key: '4' },
     { title: '其他账户', dataIndex: 'address', key: '5' },
     { title: '等值人民币金额', dataIndex: 'address', key: '6' },
     { title: 'Column 7', dataIndex: 'address', key: '7' },
+    { title: 'Column 7', dataIndex: 'address', key: '8' },
+    { title: 'Column 7', dataIndex: 'address', key: '9' },
+    { title: 'Column 7', dataIndex: 'address', key: '10' },
+    { title: 'Column 7', dataIndex: 'address', key: '11' },
     {
         title: '操作',
         key: 'operation',

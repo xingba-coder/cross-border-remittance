@@ -1,54 +1,55 @@
 
 <template>
-    <a-form :layout="'vertical'" :model="formState">
-        <a-row :gutter="16">
-            <a-col :span="6">
-                <a-form-item label="初次委托日期">
-                    <a-range-picker v-model:value="formState.fieldA" />
-                </a-form-item>
-            </a-col>
-            <a-col :span="6">
-                <a-form-item label="Field A">
-                    <a-range-picker v-model:value="formState.fieldB" />
-                </a-form-item>
-            </a-col>
-            <a-col :span="6">
-                <a-form-item label="Field A">
-                    <a-input v-model:value="formState.fieldC" placeholder="input placeholder" />
-                </a-form-item>
-            </a-col>
-            <a-col :span="6">
-                <a-form-item label="label">
-                    <a-select v-model:value="formState.region" placeholder="请选择">
-                        <a-select-option value="shanghai">Zone one</a-select-option>
-                        <a-select-option value="beijing">Zone two</a-select-option>
-                    </a-select>
-                </a-form-item>
-            </a-col>
-        </a-row>
-        <a-form-item :wrapper-col="btnWrapperCol">
-            <a-button type="primary">Submit</a-button>
-        </a-form-item>
-    </a-form>
-    <a-table :row-selection="rowSelection" :columns="columns" :data-source="tableData" size="middle"
-        :scroll="{ x: 1300, y: 1000 }">
-        <template #bodyCell="{ record, column }">
-            <template v-if="column.key === 'operation'">
-                <a @click="dealThis(record)">处理</a>
-                <a @click="deleteThis(record)" style="color:#f81d22;">删除</a>
+    <div class="container">
+        <a-form :layout="'vertical'" :model="formState">
+            <a-row :gutter="16">
+                <a-col :span="6">
+                    <a-form-item label="初次委托日期">
+                        <a-range-picker v-model:value="formState.fieldA" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="6">
+                    <a-form-item label="Field A">
+                        <a-range-picker v-model:value="formState.fieldB" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="6">
+                    <a-form-item label="Field A">
+                        <a-input v-model:value="formState.fieldC" placeholder="input placeholder" />
+                    </a-form-item>
+                </a-col>
+                <a-col :span="6">
+                    <a-form-item label="label">
+                        <a-select v-model:value="formState.region" placeholder="请选择">
+                            <a-select-option value="shanghai">Zone one</a-select-option>
+                            <a-select-option value="beijing">Zone two</a-select-option>
+                        </a-select>
+                    </a-form-item>
+                </a-col>
+            </a-row>
+            <a-form-item :wrapper-col="btnWrapperCol">
+                <a-button type="primary">Submit</a-button>
+            </a-form-item>
+        </a-form>
+        <a-table :row-selection="rowSelection" :columns="columns" :data-source="tableData" size="middle"
+            :scroll="{ x: 1300, y: 1000 }">
+            <template #bodyCell="{ record, column }">
+                <template v-if="column.key === 'operation'">
+                    <a @click="dealThis(record)">处理</a>
+                    <a @click="deleteThis(record)" style="color:#f81d22;">删除</a>
+                </template>
             </template>
-        </template>
-    </a-table>
-    <contextHolder />
+        </a-table>
+    </div>
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { computed, reactive, h } from 'vue';
+import { reactive, h } from 'vue';
 import type { UnwrapRef } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
-const [modal, contextHolder] = Modal.useModal();
+const [modal] = Modal.useModal();
 
 const router = useRouter()
 
