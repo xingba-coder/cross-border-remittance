@@ -44,6 +44,17 @@ const router = createRouter({
       ]
     },
     {
+      name:'businessCheck',
+      path:'/businessCheck',
+      children:[
+        {
+          path:'/businessCheck/singleCheck',
+          name:'singleCheck',
+          component: () => import('@/views/businessCheck/singleCheck/index.vue')
+        },
+      ]
+    },
+    {
       name:'allSearch',
       path:'/allSearch',
       children:[
