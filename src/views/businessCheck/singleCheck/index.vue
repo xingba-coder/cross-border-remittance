@@ -262,13 +262,12 @@ for (let i = 0; i < 46; i++) {
 let prevGMark:string[] = []
 let globalMark = ref<string[]>([])
 const changeGMark = () =>{
-	console.log(globalMark.value)
-	// let mark = globalMark.value
-	// let len = globalMark.value.length
-	// if(len>1){
-	// 	globalMark.value = prevGMark.concat(mark).filter(x => !prevGMark.includes(x) || !mark.includes(x))
-	// }
-	// prevGMark = globalMark.value
+	let mark = globalMark.value
+	let len = globalMark.value.length
+	if(len>1){
+		globalMark.value = prevGMark.concat(mark).filter(x => !prevGMark.includes(x) || !mark.includes(x))
+	}
+	prevGMark = globalMark.value
 }
 
 let prevMark:string[] = []
