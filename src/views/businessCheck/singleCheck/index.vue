@@ -147,10 +147,6 @@
 		<a-table :columns="columns" :data-source="tableData" size="middle" :scroll="{ x: 1300, y: 1000 }"
 			style="margin-top: 8px;">
 			<template #headerCell="{ column }">
-				<template v-if="column.key === '1'">
-					<div>客户申请号</div>
-					<div>批次号</div>
-				</template>
 				<template v-if="column.key === '3'">
 					<div>指定交易日期</div>
 					<div>是否已超期</div>
@@ -176,8 +172,7 @@
 			</template>
 			<template #bodyCell="{ record, column,index }">
 				<template v-if="column.key === '1'">
-					<div>SQ5678</div>
-					<div>PL1234</div>
+					<a style="text-decoration: underline;">SQ_{{record.date}}</a>
 				</template>
 				<template v-if="column.key === '3'">
 					<div>指定交易日期</div>
@@ -192,7 +187,7 @@
 					<div>汇款金额</div>
 				</template>
 				<template v-if="column.key === 'operation'">
-					<a-checkbox-group v-model:value="record.mark" :options="plainOptions" @change="changeGroup(index)" class="borderRadius">
+					<a-checkbox-group v-model:value="record.mark" :options="plainOptions" @change="changeMark(index)" class="borderRadius">
 						<template #label="{ label }">
 							<span>{{ label }}</span>
 						</template>
@@ -208,6 +203,7 @@ import { reactive, ref, isRef } from 'vue';
 import type { UnwrapRef } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
 import { InfoCircleOutlined,UpOutlined, DownOutlined } from '@ant-design/icons-vue';
+import dayjs from 'dayjs';
 
 const router = useRouter()
 const expand = ref(false)
@@ -233,7 +229,7 @@ const formState: UnwrapRef<FormState> = reactive({
 });
 
 const columns: TableColumnsType = [
-	{ title: '', dataIndex: 'address', key: '1' },
+	{ title: '客户申请号', dataIndex: 'date', key: '1' },
 	{ title: '初次委托日期', dataIndex: 'address', key: '2' },
 	{ title: 'Column 3', dataIndex: 'address', key: '3' },
 	{ title: 'Column 4', dataIndex: 'address', key: '4' },
@@ -249,37 +245,66 @@ const columns: TableColumnsType = [
 ];
 interface DataItem {
 	key: string|number;
+	date: string|number;
 	name: string;
 	age: number;
 	mark: Array<string>;
 	address: string;
 }
 const tableData = ref<DataItem[]>([]);
-for (let i = 0; i < 46; i++) {
-	tableData.value.push({ key: i, name: `zh&m ${i}`, age: 32, address: `London, Park Lane no. ${i}`, mark:[]});
+for (let i = 0; i < 3; i++) {
+	tableData.value.push({ key: i,date:dayjs(new Date()).format('YYYYMMDD'), name: `zh&m ${i}`, age: 32, address: `London, Park Lane no. ${i}`, mark:[]});
 }
 
 let prevGMark:string[] = []
 let globalMark = ref<string[]>([])
+
+// 全选
 const changeGMark = () =>{
+	console.log(globalMark.value)
 	let mark = globalMark.value
 	let len = globalMark.value.length
 	if(len>1){
 		globalMark.value = prevGMark.concat(mark).filter(x => !prevGMark.includes(x) || !mark.includes(x))
 	}
 	prevGMark = globalMark.value
+	
+	for (let i = 0; i < tableData.value.length; i++) {
+		let ele = tableData.value[i];
+		ele.mark = globalMark.value
+		prevMark[i] = globalMark.value // 全选时，临时数据也应该被赋值
+	}
 }
 
-let prevMark:string[] = []
-const changeGroup = (index:number) =>{
+let prevMark:{[key:string|number]:string[]} = {} // 临时数组，保存上一次选中的值，用来和当前值进行取差集操作
+const changeMark = (index:number) =>{
+	if(!prevMark[index]){
+		prevMark[index] = []
+	}
 	let mark = tableData.value[index].mark
 	let len = tableData.value[index].mark.length
 	if(len>1){
-		tableData.value[index].mark = prevMark.concat(mark).filter(x => !prevMark.includes(x) || !mark.includes(x))
+		tableData.value[index].mark = prevMark[index].concat(mark).filter(x => !prevMark[index].includes(x) || !mark.includes(x))
 	}
-	prevMark = tableData.value[index].mark
+	prevMark[index] = tableData.value[index].mark
+
+	checkGMarkShoudBeSelected()
 }
 
+// 当表格中每项都被标记相同的操作，则头部的全选按钮对应的操作也需要被选中
+const checkGMarkShoudBeSelected = () =>{
+	if(tableData.value.length>0){
+
+		let firstMark = tableData.value[0].mark
+		if(tableData.value.some((item) => item.mark.toString()!==firstMark.toString())){
+			globalMark.value = []
+			prevGMark = []
+		}else{
+			globalMark.value = firstMark
+			prevGMark = firstMark
+		}
+	}
+}
 
 </script>
 <style lang="less" scoped>
