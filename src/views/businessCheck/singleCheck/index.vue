@@ -1,149 +1,7 @@
 
 <template>
 	<div class="container">
-		<a-form :layout="'vertical'" :model="formState">
-			<a-row :gutter="48">
-				<a-col :span="6">
-					<a-form-item label="日期类型">
-						<a-range-picker v-model:value="formState.fieldA" style="width:100%;" />
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="日期范围">
-						<a-range-picker v-model:value="formState.fieldA" style="width:100%;" />
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="是否已超期">
-						<a-select v-model:value="formState.region" placeholder="请选择">
-							<a-select-option value="Y">是</a-select-option>
-							<a-select-option value="N">否</a-select-option>
-						</a-select>
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="交易状态">
-						<a-select v-model:value="formState.region" placeholder="请选择">
-							<a-select-option value="Y">是</a-select-option>
-							<a-select-option value="N">否</a-select-option>
-						</a-select>
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="汇款账户">
-						<a-input v-model:value="formState.fieldA" />
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="等值人民币金额">
-						<!-- <a-input v-model:value="value12" style="width: 48%;" placeholder="最低金额" />
-                        <span style="width:4%;text-align: center;display: inline-block;">-</span>
-                        <a-input v-model:value="value14" style="width: 48%;" placeholder="最高金额" /> -->
-						<a-input-group compact>
-							<a-input v-model:value="value12" style="width: calc(50% - 14px);" placeholder="最低金额" />
-							<a-input v-model:value="value13"
-								style="width: 30px; pointer-events: none;background-color: #fff;border-left: 0;" placeholder="~"
-								disabled />
-							<a-input v-model:value="value14" style="width: calc(50% - 14px);border-left: 0;" placeholder="最高金额" />
-						</a-input-group>
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="汇款币种">
-						<a-select v-model:value="formState.region" placeholder="请选择">
-							<a-select-option value="shanghai">Zone one</a-select-option>
-							<a-select-option value="beijing">Zone two</a-select-option>
-						</a-select>
-					</a-form-item>
-				</a-col>
-				<a-col :span="6">
-					<a-form-item label="汇款金额">
-						<a-input-group compact>
-							<a-input v-model:value="value12" style="width: calc(50% - 14px);" placeholder="最低金额" />
-							<a-input v-model:value="value13"
-								style="width: 30px; pointer-events: none;background-color: #fff;border-left: 0;" placeholder="~"
-								disabled />
-							<a-input v-model:value="value14" style="width: calc(50% - 14px);border-left: 0;" placeholder="最高金额" />
-						</a-input-group>
-					</a-form-item>
-				</a-col>
-				<template v-if="expand">
-
-					<a-col :span="6">
-						<a-form-item label="客户申请号">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="批次号">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="汇款编号">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="客户业务编号">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="收款人账号">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="收款人名称">
-							<a-input v-model:value="formState.fieldA" />
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="经办人">
-							<a-select v-model:value="formState.region" placeholder="请选择">
-								<a-select-option value="shanghai">Zone one</a-select-option>
-								<a-select-option value="beijing">Zone two</a-select-option>
-							</a-select>
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="资金追踪">
-							<a-select v-model:value="formState.region" placeholder="请选择">
-								<a-select-option value="shanghai">Zone one</a-select-option>
-								<a-select-option value="beijing">Zone two</a-select-option>
-							</a-select>
-						</a-form-item>
-					</a-col>
-					<a-col :span="6">
-						<a-form-item label="是否存在影像">
-							<a-select v-model:value="formState.region" placeholder="请选择">
-								<a-select-option value="shanghai">Zone one</a-select-option>
-								<a-select-option value="beijing">Zone two</a-select-option>
-							</a-select>
-						</a-form-item>
-					</a-col>
-				</template>
-				<a-col :span="6">
-					<a-form-item>
-						<div style="margin-top: 26px;">
-							<a-button type="primary" style="margin-right: 8px;">查询</a-button>
-							<a-button style="margin-right: 8px;">重置</a-button>
-							<a style="font-size: 12px;color:#d32f2f;" @click="expand = !expand">
-								<template v-if="expand">
-									<span>收起</span>
-									<UpOutlined />
-								</template>
-								<template v-else>
-									<span>展开</span>
-									<DownOutlined />
-								</template>
-							</a>
-						</div>
-					</a-form-item>
-				</a-col>
-			</a-row>
-		</a-form>
+		<commonSearch :schemas="schemas" @reset="reset" @search="search" />
 		<a-table :columns="columns" :data-source="tableData" size="middle" :scroll="{ x: 1300, y: 1000 }"
 			style="margin-top: 8px;">
 			<template #headerCell="{ column }">
@@ -172,7 +30,7 @@
 			</template>
 			<template #bodyCell="{ record, column,index }">
 				<template v-if="column.key === '1'">
-					<a style="text-decoration: underline;">SQ_{{record.date}}</a>
+					<a style="text-decoration: underline;" @click="toDetail">SQ_{{record.date}}</a>
 				</template>
 				<template v-if="column.key === '3'">
 					<div>指定交易日期</div>
@@ -199,34 +57,44 @@
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { reactive, ref, isRef } from 'vue';
-import type { UnwrapRef } from 'vue';
+import { ref } from 'vue';
 import type { TableColumnsType } from 'ant-design-vue';
-import { InfoCircleOutlined,UpOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { InfoCircleOutlined } from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
+import commonSearch from '@/components/searchFormTemplate.vue'
 
 const router = useRouter()
-const expand = ref(false)
+
+const schemas = [
+	{ type:'daterange', label:'初次委托日期', field:'agentDate',defaultValue:[]},
+	{ type:'daterange', label:'指定交易日期', field:'tradeDate',defaultValue:[]},
+	{ type:'select', label:'是否已超期', field:'isOverDate',defaultValue:undefined,list:[{label:'是',value:'Y'},{label:'否',value:'N'}]},
+	{ type:'select', label:'经办人', field:'status',defaultValue:undefined,list:[{label:'经办一',value:'handle'},{label:'管理员',value:'admin'}]},
+	{ toggleShow:true,type:'input', label:'汇款账户', field:'remitAccount',defaultValue:undefined},
+	{ toggleShow:true,type:'inputrange', label:'等值人民币金额', field1:'equalRmbAmt1', field2:'equalRmbAmt2',defaultValue:undefined},
+	{ toggleShow:true,type:'select', label:'汇款币种', field:'status',defaultValue:undefined,list:[{label:'人民币',value:'CNY'},{label:'美元',value:'USD'}]},
+	{ toggleShow:true,type:'inputrange', label:'汇款金额', field1:'remitAmt1', field2:'remitAmt2',defaultValue:undefined},
+	{ toggleShow:true,type:'input', label:'客户申请号', field:'applyNo',defaultValue:undefined},
+	{ toggleShow:true,type:'input', label:'收款人账号', field:'receiverAccount',defaultValue:undefined},
+	{ toggleShow:true,type:'input', label:'收款人名称', field:'receiverName',defaultValue:undefined},
+	{ toggleShow:true,type:'input', label:'客户业务编号', field:'businessNo',defaultValue:undefined},
+]
+
+interface TformData{
+	[key: string]: any
+}
+const search = (formData:TformData) =>{
+	console.log(formData)
+}
+const reset = (formData:TformData) =>{
+	console.log(formData)
+}
 
 const plainOptions = [
   { label: '通过', value: '1' },
   { label: '退回', value: '2' },
   { label: '拒绝', value: '3' },
 ];
-
-interface FormState {
-	fieldA: Array<[]>;
-	fieldB: Array<[]>;
-	fieldC: string;
-	region: string;
-}
-// Vue 3 中的一个类型工具，用于取消引用(ref)类型的嵌套。
-const formState: UnwrapRef<FormState> = reactive({
-	fieldA: [],
-	fieldB: [],
-	fieldC: '',
-	region: '',
-});
 
 const columns: TableColumnsType = [
 	{ title: '客户申请号', dataIndex: 'date', key: '1' },
@@ -304,6 +172,10 @@ const checkGMarkShoudBeSelected = () =>{
 			prevGMark = firstMark
 		}
 	}
+}
+
+const toDetail = () =>{
+	router.push({ name: 'singleCheckDetail' })
 }
 
 </script>

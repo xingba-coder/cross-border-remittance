@@ -52,6 +52,11 @@ const router = createRouter({
           name:'singleCheck',
           component: () => import('@/views/businessCheck/singleCheck/index.vue')
         },
+        {
+          path:'/businessCheck/singleCheckDetail',
+          name:'singleCheckDetail',
+          component: () => import('@/views/businessCheck/singleCheck/detail.vue')
+        },
       ]
     },
     {
