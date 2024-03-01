@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref ,reactive,onMounted,provide} from 'vue';
+import { ref,onMounted,provide} from 'vue';
 import form1 from './formComp/form1.vue'  // 通过 <script setup>，导入的组件都在模板中直接可用。
 import form2 from './formComp/form2.vue'
 import form3 from './formComp/form3.vue'
@@ -41,9 +41,9 @@ import { getCurrency,getCustActInfo,getCountryList,getTradeCode } from "@/api/te
 import type { SelectProps } from 'ant-design-vue';
 
 interface comeinObj{
-    compName:String,
-    key:String,
-    value:String | undefined,
+    compName:string,
+    key:string,
+    value:string | undefined,
 }
 
 const form1_element = ref()

@@ -157,17 +157,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted,watchEffect,inject, computed, watch } from 'vue';
+import { ref, reactive,watchEffect,inject, computed, watch } from 'vue';
 import { DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import { validateAmt } from "./util";
 
+interface TcustAct{
+    [key:string]:any
+}
 const props = defineProps({
-    custActList:{type: Array, required: true, default: () => []},
+    custActList:{type: Array as () => TcustAct[], required: true, default: () => []},
     tradeCodeList:{type: Array, required: true, default: () => []},
 })
 
-const { form1_element } = inject('childComp')
+const { form1_element } = inject<any>('childComp')
 // 这里直接打印获取 form1_element.value 会报错，猜测是加载这里时，form1_element 还没加载完
 // console.log(form1_element.value.formState.remitCur) 
 // 而通过用户事件触发再去获取能正常获取到

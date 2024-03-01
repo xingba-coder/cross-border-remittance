@@ -46,7 +46,7 @@
 import { useRouter } from 'vue-router';
 import { reactive, h } from 'vue';
 import type { UnwrapRef } from 'vue';
-import type { TableColumnsType } from 'ant-design-vue';
+import type { TableColumnsType,TableProps } from 'ant-design-vue';
 import { Modal } from 'ant-design-vue';
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 const [modal] = Modal.useModal();
@@ -87,8 +87,10 @@ const columns: TableColumnsType = [
         width: 100,
     },
 ];
+
+type Key = string | number;
 interface DataItem {
-    key: string;
+    key: string|number;
     name: string;
     age: number;
     address: string;
@@ -98,20 +100,20 @@ for (let i = 0; i < 46; i++) {
     tableData.push({ key: i, name: `zh&m ${i}`, age: 32, address: `London, Park Lane no. ${i}` });
 }
 const rowSelection: TableProps['rowSelection'] = {
-    onChange: (selectedRowKeys: string[], selectedRows: DataType[]) => {
+    onChange: (selectedRowKeys: Key[], selectedRows: any[]) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
-    getCheckboxProps: (record: DataType) => ({
+    getCheckboxProps: (record: DataItem) => ({
         disabled: record.name === 'Disabled User', // Column configuration not to be checked
         name: record.name,
     }),
 };
 
 
-const dealThis = (record) => {
+const dealThis = (record:DataItem) => {
     router.push({ name: 'singleRemit-launch' })
 }
-const deleteThis = (record) => {
+const deleteThis = (record:DataItem) => {
     modal.confirm({
         title: '确认删除所选项？',
         icon: h(ExclamationCircleOutlined),
@@ -119,7 +121,7 @@ const deleteThis = (record) => {
         okText: '确认',
         cancelText: '取消',
         onOk() {
-            console.log('OK', contextHolder);
+            // console.log('OK', contextHolder);
         },
         onCancel() {
             console.log('Cancel');

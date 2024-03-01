@@ -281,7 +281,7 @@ const removeThousandsFormat = (field:string) =>{
     }
 }
 const validateInfoMap = new Map()
-const anyoneValidate = (name, status, errorMsgs) =>{
+const anyoneValidate = (name:any, status:any, errorMsgs:any) =>{
     validateInfoMap.set(name,status)
 }
 
